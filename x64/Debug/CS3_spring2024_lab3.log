@@ -1,0 +1,5 @@
+﻿  CS3_spring2024_lab3.cpp
+C:\Users\gjmos\source\repos\CS3_spring2024_lab3\CS3_spring2024_lab3\CS3_spring2024_lab3.cpp(98,10): warning C4101: 'tempChar': unreferenced local variable
+C:\Users\gjmos\source\repos\CS3_spring2024_lab3\CS3_spring2024_lab3\CS3_spring2024_lab3.cpp(15): warning C4715: 'choiceSelector': not all control paths return a value
+C:\Users\gjmos\source\repos\CS3_spring2024_lab3\CS3_spring2024_lab3\CS3_spring2024_lab3.cpp(38): warning C4715: 'getAnswer': not all control paths return a value
+  CS3_spring2024_lab3.vcxproj -> C:\Users\gjmos\source\repos\CS3_spring2024_lab3\x64\Debug\CS3_spring2024_lab3.exe
