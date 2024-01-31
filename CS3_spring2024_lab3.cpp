@@ -2,40 +2,31 @@
 
 using namespace std;
 
-int listPtr = 0;
+int listPtr = 0; // default list pointer value
 
-bool choiceSelector(int someNum)
+int getAnswer()
 {
-    if (someNum == 1)
-    {
-        return true;
-    }
-    else if (someNum == 2)
-    {
-        return false;
-    }
-}
-bool getAnswer()
-{
-    cout << "Enter 1 to Add or 2 to Delete a value" << endl;
+    cout << "Enter 1 to Add Value" << endl;
+    cout << "Enter 2 to Delete Value" << endl;
+    cout << "Enter ANY other character to EXIT" << endl;
     int someAns = 0;
     cin >> someAns;
+
     if(someAns == 1)
     {
         cout << "ADDING" << endl;
-        return choiceSelector(someAns);
+        return someAns;
         
     }
     else if(someAns == 2)
     {
         cout << "DELETING" << endl;
-        return choiceSelector(someAns);
+        return someAns;
         
     }
     else
     {
-        cout << "INVALID RESPONSE" << endl;
-        
+        cout << "EXITING" << endl;
         
     }
 }
@@ -86,14 +77,14 @@ void reLink(char letter, char someL[], int someLk[], int lPtr, int newP)
 }
 
 // implementing addition of value to array, and Link set up
-void addVal( char someL[], int someLk[], int &lPtr)
+void addVal( char someL[], int someLk[], int &lPtr) // passing list pointer by reference to modify value
 {
     char tempLetter = ' ';
     int nPosition = 0;
     cout << "Enter a letter to Add:" << endl;
     cin >> tempLetter;
     int i = 0;
-    while(someL[i] != NULL)
+    while(someL[i] != NULL && someL[i] != ' ')
     {
         if (tempLetter == someL[i])
         {
@@ -104,32 +95,85 @@ void addVal( char someL[], int someLk[], int &lPtr)
         nPosition++;
     }
     someL[i] = tempLetter;
-    int j = lPtr;
-    while (someL[j] != NULL)
-    {
-        if (someL[nPosition] < someL[lPtr])
-        {
-            someLk[nPosition] = lPtr;
-            lPtr = nPosition;
-            
-            break;
-        }
-        else if(someL[nPosition] > someL[lPtr] && someL[nPosition] < someL[someLk[lPtr]])
-        {
-            int tempLink = someLk[lPtr];
-            someLk[lPtr] = nPosition;
-            someLk[nPosition] = tempLink;
-            break;
-        }
-        j = someLk[j];
-        
-    }
     
+    if (tempLetter < someL[lPtr])
+    {
+        someLk[nPosition] = lPtr;
+        lPtr = nPosition;
+    }
+    else
+    {
+        int curr = lPtr;
+        int prev = NULL;
+
+        while (curr != 99 && tempLetter > someL[curr])
+        {
+            prev = curr;
+            curr = someLk[curr];
+        }
+
+        if (curr == 99)
+        {
+            someLk[prev] = nPosition;
+            someLk[nPosition] = 99;
+        }
+        else
+        {
+            someLk[prev] = nPosition;
+            someLk[nPosition] = curr;
+        } 
+    }
+   /*cout << "<===========================>" << endl;
     cout << "HEAD:" << lPtr << endl;
-    showList(someL, someLk, lPtr);
+    cout << "<===========================>" << endl;
+    showList(someL, someLk, lPtr);*/
     
 }
 
+
+void deleteVal(char someL[], int someLk[], int &lPtr)
+{
+    char deleteL = ' ';
+    cout << "Enter Value to Delete" << endl;
+    cin >> deleteL;
+    int curr = lPtr;
+    int prev = NULL;
+    while (curr != 99 && deleteL != someL[curr])
+    {
+        prev = curr;
+        curr = someLk[curr];
+    }
+    
+    if (curr == 99 && deleteL != someL[prev])
+    {
+        cout << "Value does not Exist!!!" << endl;
+        return;
+          
+    }
+    else if (curr == 99 && deleteL == someL[prev])
+    {
+        someL[prev] = ' ';
+        someLk[prev - 1] = curr;
+        return;
+    }
+    else if (curr == lPtr && deleteL == someL[curr])
+    {
+        someL[curr] = ' ';
+        lPtr = someLk[curr];
+        return;
+    }
+    else
+    {
+        someL[curr] = ' ';
+        someLk[prev] = someLk[curr];
+        return;
+    }
+
+    /*cout << "<===========================>" << endl;
+    cout << "HEAD:" << lPtr << endl;
+    cout << "<===========================>" << endl;
+    showList(someL, someLk, lPtr); */
+}
 
 int main()
 {
@@ -145,19 +189,32 @@ int main()
     int listPtr = 0;
     char tempChar;  // value for user to add or delete
     int tempLink =0;
+    cout << "<===========================>" << endl;
+    cout << "HEAD:" << listPtr << endl;
+    cout << "<===========================>" << endl;
     showList(myList, myLink, listPtr);
-    
-    while (getAnswer != NULL)
+    int checker = getAnswer();
+    while (checker ==1 || checker ==2)
     {
-        if (getAnswer() == true)
+        if (checker == 1)
         {
             addVal(myList, myLink, listPtr);
-        }
-        else if(getAnswer() == false)
-        {
-            cout << "some deleting stuff goin on" << endl;
 
         }
+        else if(checker == 2)
+        {
+            deleteVal(myList, myLink, listPtr);
+
+        }
+        else
+        {
+            break;
+        }
+        cout << "<===========================>" << endl;
+        cout << "HEAD:" << listPtr << endl;
+        cout << "<===========================>" << endl;
+        showList(myList, myLink, listPtr);
+        checker = getAnswer();
     }
 }
 
