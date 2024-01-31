@@ -2,6 +2,8 @@
 
 using namespace std;
 
+int listPtr = 0;
+
 bool choiceSelector(int someNum)
 {
     if (someNum == 1)
@@ -34,6 +36,7 @@ bool getAnswer()
     {
         cout << "INVALID RESPONSE" << endl;
         
+        
     }
 }
 
@@ -41,15 +44,52 @@ bool getAnswer()
 void showList(char someList[],int someLink[], int somePtr)
 {
     cout << "Position" << " || " << "List" << " || " << "Link" << endl;
-    for (somePtr; someList[somePtr] != NULL; somePtr++)
+    for (int i =0; someList[i] != NULL; i++)
     {
-        cout << somePtr << "         " << someList[somePtr] << "         " << someLink[somePtr] << endl;
+        cout << i << "         " << someList[i] << "         " << someLink[i] << endl;
     }
 }
 
-void addVal( char someL[], int someLk[], int lPtr)
+// Scraped Function
+void reLink(char letter, char someL[], int someLk[], int lPtr, int newP)
+{
+    int tempPtr = 0;
+    int prevPtr = 0;
+    int nextPtr = 1;
+    
+    while (someL[tempPtr] != NULL)
+    {
+        if (letter > someL[tempPtr])
+        {
+            if (someL[tempPtr + 2] == NULL)
+            {   
+                someLk[tempPtr] = newP;
+                someLk[lPtr] = tempPtr;
+                break;
+            }
+            else
+            {
+                prevPtr = tempPtr;
+                nextPtr = tempPtr + 1;
+            }
+            
+        }
+        else if (letter < someL[tempPtr])
+        {   
+            someLk[prevPtr] = tempPtr;
+            someLk[tempPtr]= nextPtr;    
+            
+        }
+
+        tempPtr++;
+    }
+}
+
+// implementing addition of value to array, and Link set up
+void addVal( char someL[], int someLk[], int &lPtr)
 {
     char tempLetter = ' ';
+    int nPosition = 0;
     cout << "Enter a letter to Add:" << endl;
     cin >> tempLetter;
     int i = 0;
@@ -61,28 +101,36 @@ void addVal( char someL[], int someLk[], int lPtr)
             return;
         }
         i++;
+        nPosition++;
     }
     someL[i] = tempLetter;
-    showList(someL, someLk, lPtr);
-    getAnswer();
-}
-
-void reLink(char letter, char someL[], int someLk[], int lPtr)
-{
-
-    if (letter == someL[lPtr])
+    int j = lPtr;
+    while (someL[j] != NULL)
     {
-        cout << "Value already exists!!!" << endl;
-        return;
-    }
-    else
-    {
-        if (letter < someL[lPtr])
+        if (someL[nPosition] < someL[lPtr])
         {
-            return;
+            someLk[nPosition] = lPtr;
+            lPtr = nPosition;
+            
+            break;
         }
+        else if(someL[nPosition] > someL[lPtr] && someL[nPosition] < someL[someLk[lPtr]])
+        {
+            int tempLink = someLk[lPtr];
+            someLk[lPtr] = nPosition;
+            someLk[nPosition] = tempLink;
+            break;
+        }
+        j = someLk[j];
+        
     }
+    
+    cout << "HEAD:" << lPtr << endl;
+    showList(someL, someLk, lPtr);
+    
 }
+
+
 int main()
 {
     char myList[99] = { 'D','G','J','M','R','W'};
@@ -98,15 +146,18 @@ int main()
     char tempChar;  // value for user to add or delete
     int tempLink =0;
     showList(myList, myLink, listPtr);
-    getAnswer();
-    if (getAnswer() == true)
-    {
-        addVal(myList, myLink, listPtr);
-    }
-    else
-    { 
-        cout << "some deleting stuff goin on" << endl;
     
+    while (getAnswer != NULL)
+    {
+        if (getAnswer() == true)
+        {
+            addVal(myList, myLink, listPtr);
+        }
+        else if(getAnswer() == false)
+        {
+            cout << "some deleting stuff goin on" << endl;
+
+        }
     }
 }
 
